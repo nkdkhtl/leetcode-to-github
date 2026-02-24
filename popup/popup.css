@@ -1,0 +1,238 @@
+body {
+  width: 420px;
+  background-color: #0c0c0c;
+  color: #00ff41;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0;
+  padding: 15px;
+  border: 1px solid #00ff41;
+}
+
+.terminal-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.prompt {
+  color: #00ff41;
+  font-weight: bold;
+}
+
+.header {
+  border-bottom: 1px solid #003300;
+  padding-bottom: 5px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.content h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #00ff41;
+  border-bottom: 1px solid #003300;
+  padding-bottom: 5px;
+}
+
+/* Toggle Switch */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #1a1a1a;
+  border: 1px solid #003300;
+}
+
+.toggle-container label:first-child {
+  font-weight: bold;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #003300;
+  transition: 0.3s;
+  border: 1px solid #00ff41;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.on-text,
+.off-text {
+  display: none;
+  color: #00ff41;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 24px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #00ff41;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+input:checked + .slider {
+  background-color: #00660b;
+}
+
+input:checked + .slider::before {
+  transform: translateX(32px);
+}
+
+input:checked + .slider .on-text {
+  display: block;
+  position: absolute;
+  left: 8px;
+}
+
+input:not(:checked) + .slider .off-text {
+  display: block;
+  position: absolute;
+  right: 6px;
+}
+
+/* Sections */
+.config-section,
+.status-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #008f11;
+}
+
+input {
+  background: #000;
+  border: 1px solid #003300;
+  color: #00ff41;
+  padding: 5px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #00ff41;
+}
+
+button {
+  background: #003300;
+  color: #00ff41;
+  border: 1px solid #00ff41;
+  padding: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background: #00ff41;
+  color: #000;
+}
+
+#config-status {
+  font-size: 0.75rem;
+  margin-top: 5px;
+  color: #008f11;
+}
+
+/* Activity Log */
+.activity-log {
+  max-height: 150px;
+  overflow-y: auto;
+  background: #000;
+  border: 1px solid #003300;
+  padding: 8px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.log-entry {
+  color: #00ff41;
+  margin-bottom: 5px;
+  word-break: break-word;
+}
+
+.log-entry.success {
+  color: #00cc00;
+}
+
+.log-entry.error {
+  color: #ff4444;
+}
+
+.log-entry.warning {
+  color: #ffaa00;
+}
+
+/* Custom scrollbar */
+.activity-log::-webkit-scrollbar {
+  width: 8px;
+}
+
+.activity-log::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.activity-log::-webkit-scrollbar-thumb {
+  background: #003300;
+  border-radius: 4px;
+}
+
+.activity-log::-webkit-scrollbar-thumb:hover {
+  background: #00ff41;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #003300;
+  margin: 5px 0;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}

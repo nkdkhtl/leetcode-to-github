@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="terminal-container">
+      <div class="header">
+        <span class="prompt">nk@leetsync:~$</span>
+        <span class="cursor">_</span>
+      </div>
+
+      <div class="content">
+        <!-- Toggle Button -->
+        <div class="toggle-container">
+          <label for="toggle-switch">Extension Status:</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-switch" checked />
+            <span class="slider">
+              <span class="on-text">ON</span>
+              <span class="off-text">OFF</span>
+            </span>
+          </label>
+        </div>
+
+        <hr />
+
+        <!-- Config Section -->
+        <div class="config-section">
+          <h3>⚙️ Configuration</h3>
+          <div class="input-group">
+            <label for="token">GITHUB_TOKEN:</label>
+            <input type="password" id="token" placeholder="****************" />
+          </div>
+
+          <div class="input-group">
+            <label for="repo">REPO_PATH:</label>
+            <input type="text" id="repo" placeholder="username/repository" />
+          </div>
+
+          <button id="save-btn">[ SAVE_CONFIG ]</button>
+          <div id="config-status">> System ready...</div>
+        </div>
+
+        <hr />
+
+        <!-- Status Section -->
+        <div class="status-section">
+          <h3>📊 Recent Activity</h3>
+          <div id="activity-log" class="activity-log">
+            <div class="log-entry">> Waiting for submissions...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
