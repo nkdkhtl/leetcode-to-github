@@ -1,3 +1,38 @@
+console.log("🚀 LTG: Extension loaded on LeetCode page");
+
+// Keep background service worker alive by pinging every 25 seconds
+// This ensures background is ready to receive messages when user submits
+let backgroundPingInterval = null;
+
+function startBackgroundPing() {
+  // Clear existing interval if any
+  if (backgroundPingInterval) {
+    clearInterval(backgroundPingInterval);
+  }
+  
+  // Ping background every 25 seconds to keep it alive
+  backgroundPingInterval = setInterval(() => {
+    try {
+      chrome.runtime.sendMessage(
+        { action: "ping" },
+        (response) => {
+          // Silent ping, only log errors
+          if (chrome.runtime.lastError) {
+            console.warn("⚠️ LTG: Background ping failed:", chrome.runtime.lastError.message);
+          }
+        }
+      );
+    } catch (e) {
+      console.warn("⚠️ LTG: Failed to ping background:", e);
+    }
+  }, 25000); // Every 25 seconds
+  
+  console.log("💓 LTG: Started background ping (every 25s)");
+}
+
+// Start pinging immediately
+startBackgroundPing();
+
 // Hàm inject script vào page context để truy cập window.monaco
 function getMonacoData() {
   return new Promise((resolve) => {
@@ -152,6 +187,7 @@ async function getSubmittedCode() {
   // Method 2: DOM .view-lines
   const codeElement = document.querySelector(".view-lines");
   if (codeElement && codeElement.innerText) {
+    console.log("📝 LTG: Code extracted from .view-lines");
     return { code: codeElement.innerText, language: null };
   }
 
@@ -218,12 +254,17 @@ async function handleSuccess() {
     const isEnabled = result?.extensionEnabled !== false;
 
     if (!isEnabled) {
+      console.log("⏸️ LTG: Extension is OFF - skipping");
       return;
     }
 
+    console.log("✅ LTG: Accepted detected! Processing...");
     const title = getProblemTitle();
+    console.log("📄 LTG: Problem title:", title);
+
     const codeResult = await getSubmittedCode();
     const stats = await getSubmissionStats();
+    console.log("📊 LTG: Stats -", stats);
 
     if (!codeResult || !codeResult.code) {
       console.error("LTG: Cannot extract code from page");
@@ -234,29 +275,48 @@ async function handleSuccess() {
     let language = codeResult.language
       ? mapLanguage(codeResult.language)
       : getLanguageFallback();
+    console.log("🔤 LTG: Language detected:", language);
 
     // Gửi message đến background script
+    console.log("📤 LTG: Sending to background...");
+    
+    // Check if runtime is available before sending
+    if (!chrome.runtime?.id) {
+      console.error("❌ LTG: Extension context invalidated (may need reload)");
+      return;
+    }
+    
     return new Promise((resolve) => {
-      chrome.runtime.sendMessage(
-        {
-          action: "pushToGithub",
-          payload: {
-            title: title,
-            body: codeResult.code,
-            lang: language,
-            time: stats?.time || "",
-            memory: stats?.memory || "",
+      try {
+        chrome.runtime.sendMessage(
+          {
+            action: "pushToGithub",
+            payload: {
+              title: title,
+              body: codeResult.code,
+              lang: language,
+              time: stats?.time || "",
+              memory: stats?.memory || "",
+            },
           },
-        },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            console.error("LTG: Message error:", chrome.runtime.lastError);
-          } else if (response && response.error) {
-            console.error("LTG: Upload failed:", response.error);
-          }
-          resolve(response);
-        },
-      );
+          (response) => {
+            if (chrome.runtime.lastError) {
+              console.error("❌ LTG: Message error:", chrome.runtime.lastError);
+              console.error("💡 LTG: Hint - Background may be sleeping. Try reloading extension.");
+            } else if (response && response.error) {
+              console.error("❌ LTG: Upload failed:", response.error);
+            } else if (response && response.success) {
+              console.log("✅ LTG: Successfully pushed to GitHub!");
+            } else {
+              console.warn("⚠️ LTG: No response from background (may be terminated)");
+            }
+            resolve(response);
+          },
+        );
+      } catch (error) {
+        console.error("❌ LTG: Failed to send message:", error);
+        resolve(null);
+      }
     });
   } catch (err) {
     console.error("LTG: ERROR in handleSuccess:", err);
@@ -286,6 +346,7 @@ function checkAcceptedResult() {
 
       // Chỉ trigger khi submission này chưa được xử lý
       if (currentSubmissionId && currentSubmissionId !== handledSubmissionId) {
+        console.log("🎯 LTG: New accepted submission:", currentSubmissionId);
         handledSubmissionId = currentSubmissionId;
         handleSuccess();
       }
@@ -308,15 +369,52 @@ const observer = new MutationObserver((mutations) => {
   }
 });
 
-// Bắt đầu observer
-observer.observe(document.body, { childList: true, subtree: true });
+// Bắt đầu observer - wait for body to be ready
+function startObserver() {
+  if (document.body) {
+    observer.observe(document.body, { childList: true, subtree: true });
+    console.log("👀 LTG: MutationObserver started");
+  } else {
+    // Fallback: wait for DOMContentLoaded
+    console.warn("⚠️ LTG: document.body not ready, waiting...");
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        observer.observe(document.body, { childList: true, subtree: true });
+        console.log("👀 LTG: MutationObserver started (after DOMContentLoaded)");
+      });
+    } else {
+      // Already loaded, retry
+      setTimeout(() => {
+        if (document.body) {
+          observer.observe(document.body, { childList: true, subtree: true });
+          console.log("👀 LTG: MutationObserver started (delayed)");
+        }
+      }, 100);
+    }
+  }
+}
+
+startObserver();
 
 // Kiểm tra xem có result element nào đó sẵn có không (trường hợp script load muộn)
 checkAcceptedResult();
 
 // Reset handler khi URL thay đổi (tức là submit code mới)
 const originalPushState = window.history.pushState;
+const originalReplaceState = window.history.replaceState;
+
 window.history.pushState = function (...args) {
   handledSubmissionId = null; // Reset khi navigate
   return originalPushState.apply(window.history, args);
 };
+
+window.history.replaceState = function (...args) {
+  handledSubmissionId = null; // Reset khi navigate
+  return originalReplaceState.apply(window.history, args);
+};
+
+// Handle popstate event (back/forward button)
+window.addEventListener('popstate', () => {
+  handledSubmissionId = null;
+  console.log("🔄 LTG: Navigation detected, reset submission tracking");
+});
