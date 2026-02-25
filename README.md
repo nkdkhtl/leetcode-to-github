@@ -4,7 +4,7 @@
 
 A browser extension that seamlessly syncs your LeetCode accepted submissions to your GitHub repository, helping you build your coding portfolio effortlessly.
 
-[![Firefox Add-on](https://img.shields.io/badge/Firefox-141e24.svg?&style=for-the-badge&logo=firefox-browser&logoColor=white)](https://addons.mozilla.org)
+[![Firefox Add-on](https://img.shields.io/badge/Firefox-141e24.svg?&style=for-the-badge&logo=firefox-browser&logoColor=white)](https://addons.mozilla.org/firefox/downloads/file/4705666/1abfcf45fe1b4dcfbd00-1.3.1.xpi)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)](https://chrome.google.com/webstore)
 
 ---
@@ -47,7 +47,7 @@ A browser extension that seamlessly syncs your LeetCode accepted submissions to 
 
 **Firefox:**
 
-- [Install from Firefox Add-ons](https://addons.mozilla.org) (Coming soon)
+- [Install from Firefox Add-ons](https://addons.mozilla.org/firefox/downloads/file/4705666/1abfcf45fe1b4dcfbd00-1.3.1.xpi)
 
 **Chrome:**
 
