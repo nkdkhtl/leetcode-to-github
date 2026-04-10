@@ -1,59 +1,114 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="popup.css" />
-  </head>
-  <body>
-    <div class="terminal-container">
-      <div class="header">
-        <span class="prompt">nk@leetsync:~$</span>
-        <span class="cursor">_</span>
-      </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <div class="app">
+            <div class="app-header">
+                <h1>LeetCode to GitHub</h1>
+                <button
+                    id="theme-toggle"
+                    class="btn btn-secondary"
+                    type="button"
+                >
+                    Dark mode
+                </button>
+            </div>
 
-      <div class="content">
-        <!-- Toggle Button -->
-        <div class="toggle-container">
-          <label for="toggle-switch">Extension Status:</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="toggle-switch" checked />
-            <span class="slider">
-              <span class="on-text">ON</span>
-              <span class="off-text">OFF</span>
-            </span>
-          </label>
+            <section class="card">
+                <div class="row between">
+                    <label class="label" for="toggle-switch"
+                        >Extension status</label
+                    >
+                    <label class="switch" aria-label="Extension status">
+                        <input type="checkbox" id="toggle-switch" checked />
+                        <span class="switch-slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Configuration</h2>
+
+                <div class="group">
+                    <label class="label">GitHub account</label>
+                    <div class="row gap">
+                        <button id="auth-btn" class="btn" type="button">
+                            Connect GitHub
+                        </button>
+                        <button
+                            id="disconnect-btn"
+                            class="btn btn-secondary"
+                            type="button"
+                            hidden
+                        >
+                            Disconnect
+                        </button>
+                    </div>
+                    <p id="auth-status" class="status">Not connected</p>
+                    <div id="oauth-code-panel" class="oauth-code-panel" hidden>
+                        <p class="oauth-code-title">Device code</p>
+                        <p id="oauth-device-code" class="oauth-device-code">
+                            ---- ----
+                        </p>
+                        <div class="row gap">
+                            <button
+                                id="copy-device-code-btn"
+                                class="btn btn-secondary"
+                                type="button"
+                            >
+                                Copy code
+                            </button>
+                            <button
+                                id="open-device-page-btn"
+                                class="btn btn-secondary"
+                                type="button"
+                            >
+                                Open page
+                            </button>
+                        </div>
+                    </div>
+                    <div id="github-profile" class="github-profile" hidden>
+                        <img
+                            id="github-avatar"
+                            class="github-avatar"
+                            src=""
+                            alt="GitHub avatar"
+                        />
+                        <div class="github-meta">
+                            <p id="github-name" class="github-name">-</p>
+                            <p id="github-username" class="github-username">
+                                @-
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label class="label" for="repo-select"
+                        >Repository path</label
+                    >
+                    <select id="repo-select">
+                        <option value="">Connect GitHub to load repos</option>
+                    </select>
+                </div>
+
+                <button id="save-btn" class="btn" type="button">
+                    Save config
+                </button>
+                <p id="config-status" class="status">System ready.</p>
+            </section>
+
+            <section class="card">
+                <h2>Recent activity</h2>
+                <div id="activity-log" class="activity-log">
+                    <div class="log-entry">Waiting for submissions...</div>
+                </div>
+            </section>
         </div>
-
-        <hr />
-
-        <!-- Config Section -->
-        <div class="config-section">
-          <h3>⚙️ Configuration</h3>
-          <div class="input-group">
-            <label for="token">GITHUB_TOKEN:</label>
-            <input type="password" id="token" placeholder="****************" />
-          </div>
-
-          <div class="input-group">
-            <label for="repo">REPO_PATH:</label>
-            <input type="text" id="repo" placeholder="username/repository" />
-          </div>
-
-          <button id="save-btn">[ SAVE_CONFIG ]</button>
-          <div id="config-status">> System ready...</div>
-        </div>
-
-        <hr />
-
-        <!-- Status Section -->
-        <div class="status-section">
-          <h3>📊 Recent Activity</h3>
-          <div id="activity-log" class="activity-log">
-            <div class="log-entry">> Waiting for submissions...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="popup.js"></script>
-  </body>
+        <script src="popup.js"></script>
+    </body>
 </html>
