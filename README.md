@@ -6,7 +6,7 @@ A browser extension that seamlessly syncs your LeetCode accepted submissions to 
 
 [![Firefox Add-on](https://img.shields.io/badge/Firefox-141e24.svg?&style=for-the-badge&logo=firefox-browser&logoColor=white)](https://addons.mozilla.org/firefox/downloads/file/4705666/1abfcf45fe1b4dcfbd00-1.3.1.xpi)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)](https://chrome.google.com/webstore)
-[![Edge Add-ons](https://img.shields.io/badge/Edge-0078D4?style=for-the-badge&logo=microsoftedge&logoColor=white)](https://microsoftedge.microsoft.com/addons)
+[![Edge Add-ons](https://img.shields.io/badge/Edge-0078D4?style=for-the-badge&logo=microsoftedge&logoColor=white)]([https://microsoftedge.microsoft.com/addons](https://microsoftedge.microsoft.com/addons/detail/leetcode-to-github/lfieopaebajihgpifihbjomjojiigjjd))
 
 ---
 
@@ -57,7 +57,7 @@ A browser extension that seamlessly syncs your LeetCode accepted submissions to 
 
 **Microsoft Edge:**
 
-- [Install from Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons) (Coming soon)
+- [Install from Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/leetcode-to-github/lfieopaebajihgpifihbjomjojiigjjd)
 
 ### Manual Installation (Development)
 
